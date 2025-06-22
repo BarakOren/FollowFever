@@ -38,8 +38,8 @@ const QuestionButton = styled.button`
 `;
 
 const Answer = styled.div`
-  padding: 0.5rem 0;
-  font-size: 0.95rem;
+  padding: 0.3rem 0;
+  font-size: 1.1rem;
   color: #555;
   max-height: ${({ isOpen }) => (isOpen ? "200px" : "0")};
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
@@ -83,6 +83,11 @@ export default function FaqSection() {
       question: "Can I scrape as often as I want?",
       answer:
         "To prevent rate-limits and blocks, we recommend spacing your searches and not exceeding the recommended usage per day.",
+    },
+      {
+      question: "Who should i scrape from?",
+      answer:
+        "Think big, go to accounts of big influencers in your nieche!",
     },
   ];
 

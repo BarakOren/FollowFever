@@ -32,10 +32,11 @@ const HeroSubtitle = styled.p`
 const CtaButton = styled.a`
   background: #b93bf6;
   color: #fff;
-  padding: 0.75rem 2rem;
-  border-radius: 0.5rem;
+  padding: 1rem 2.25rem;
+  border-radius: 1rem;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  margin: 100px 0;
   &:hover {
     background:rgb(88, 20, 122);
     transition: background 0.3s ease;   
@@ -100,7 +101,7 @@ const AboutText = styled.p`
 `;
 
 const PricingSection = styled.section`
-  padding: 4rem 2rem;
+  padding: 7rem 2rem;
   text-align: center;
 `;
 
@@ -114,12 +115,6 @@ const PricingText = styled.p`
   margin-bottom: 2rem;
 `;
 
-const Footer = styled.footer`
-  padding: 2rem;
-  text-align: center;
-  color: #fff;
-  font-size: 0.875rem;
-`;
 
 const FeatureImg = styled.img`
     max-width: 6rem;     
@@ -179,9 +174,7 @@ export default function HomePage() {
         <CtaButton href="/pricing">See Pricing</CtaButton>
       </PricingSection>
 
-      <Footer>
-        © {new Date().getFullYear()} OurApp | <a href="/about" style={{ color: "#aaa" }}>About</a> | <a href="/pricing" style={{ color: "#aaa" }}>Pricing</a> | <a href="/dashboard" style={{ color: "#aaa" }}>Dashboard</a>
-      </Footer>
+   
     </Container>
   );
 }
