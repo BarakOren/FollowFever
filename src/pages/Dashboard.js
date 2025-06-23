@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import styled from "styled-components";
+import { useAuth } from "../context/AuthContext";
+
 
 
 const InputGroup = styled.div`
@@ -106,6 +108,14 @@ const ToggleButton = styled.button`
   }
 `;
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3rem
+`
+
 const Dashboard = () => {
 
  const [username, setUsername] = useState(
@@ -114,6 +124,9 @@ const Dashboard = () => {
   const [password, setPassword] = useState(
     localStorage.getItem("igPassword") || ""
   );
+
+    const { isLoggedIn, coins, setCoins } = useAuth(); // directly use it
+
   const [postUrl, setPostUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
@@ -138,6 +151,11 @@ const Dashboard = () => {
     e.preventDefault();
     setError(null);
     setResults(null);
+
+    if (coins <= 0) {
+      setError("You have no coins left. Please buy more.");
+      return;
+    }
 
     const alreadyScraped = history.some((item) => item.postUrl === postUrl);
     if (alreadyScraped) {
@@ -166,6 +184,8 @@ const Dashboard = () => {
       const data = await res.json();
       setResults(data);
 
+      setCoins(prev => prev - 1);
+
       const newEntry = {
         postUrl,
         links: data.links,
@@ -189,6 +209,10 @@ const Dashboard = () => {
   const toggleRow = (index) => {
     setExpandedRows((prev) => ({ ...prev, [index]: !prev[index] }));
   };
+
+
+
+
 
     return (
         <>
@@ -225,7 +249,7 @@ const Dashboard = () => {
             />
           </label>
         </InputGroup>
-        <SubmitButton type="submit" disabled={loading}>
+          <SubmitButton type="submit" disabled={loading}>
           {loading ? "Scraping..." : "Scrape"}
         </SubmitButton>
       </form>

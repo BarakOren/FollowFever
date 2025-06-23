@@ -10,6 +10,7 @@ import Pricing from "./pages/Pricing";
 import Footer from "./pages/components/Footer";
 import PaymentPage from "./pages/PaymentPage";
 import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 
 // background-image: linear-gradient(to right bottom, #f8ffea, #fdf5de, #ffead8, #ffe0d7, #ffd7dc, #fad8e8, #f0daf3, #e3defa, #dce8ff, #daf1ff, #e0f9ff, #eafffe);
 
@@ -32,11 +33,7 @@ const AppContainer = styled.div`
   color: #222;
 `;
 
-const Title = styled.header`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-`;
+
 
 
 export default function App() {
@@ -53,6 +50,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/checkout" element={<PaymentPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
      </Routes>
      <Footer />
     </AppContainer>

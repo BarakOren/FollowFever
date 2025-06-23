@@ -6,6 +6,7 @@ const FooterCon = styled.footer`
   text-align: center;
   color: black;
   font-size: 0.875rem;
+  margin-top: 2rem;
 `;
 
 const Footer = () => {

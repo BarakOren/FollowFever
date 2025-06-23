@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useAuth } from "./context/AuthContext"; // Adjust the import path as necessary
 
 // 💅 Styled Components
 const HeaderContainer = styled.header`
@@ -53,8 +54,15 @@ const DashboardButton = styled(Link)`
   }
 `;
 
+const Coins = styled.p`
+  font-size: 1.2rem;
+`;
+
 
 const Header = () => {
+  const { isLoggedIn, coins } = useAuth(); // directly use it
+
+
   return (
     <HeaderContainer>
       <Logo to="/">FollowFever🔥</Logo>
@@ -62,6 +70,7 @@ const Header = () => {
         <NavLink to="pricing">Pricing</NavLink>
         <NavLink to="about">About</NavLink>
         <DashboardButton to="dashboard">Dashboard</DashboardButton>
+        <NavLink to="pricing" style={{color: coins < 5 ? 'red' : 'none'}}>{coins} 🪙</NavLink>
       </NavLinks>
     </HeaderContainer>
   );
