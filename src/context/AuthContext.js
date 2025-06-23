@@ -1,33 +1,38 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [coins, setCoins] = useState(10);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy login and logout to test
-  const login = () => setIsLoggedIn(true);
-  const logout = () => setIsLoggedIn(false);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);             // Save full user object
+      setIsLoggedIn(!!user);           // true if user exists
+      setLoading(false);               // auth init is complete
+    });
 
-  //   useEffect(() => {
-  //   const savedCoins = localStorage.getItem("coins");
-  //   if (savedCoins) setCoins(Number(savedCoins));
-  // }, []);
+    return () => unsubscribe();
+  }, []);
 
-
-  //   useEffect(() => {
-  //   localStorage.setItem("coins", coins);
-  // }, [coins]);
+  const value = {
+    currentUser,
+    isLoggedIn,
+    setIsLoggedIn, // optional to control this manually
+  };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, coins, setCoins }}>
-      {children}
+    <AuthContext.Provider value={value}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 }
 
-// Custom hook for easy use of the context
+// Easy useAuth() hook
 export function useAuth() {
   return useContext(AuthContext);
 }

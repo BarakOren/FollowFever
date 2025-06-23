@@ -1,6 +1,8 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { useAuth } from "../context/AuthContext";
+import { signOutUser } from "../utils/signOutUser";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -116,6 +118,22 @@ const Row = styled.div`
   gap: 3rem
 `
 
+const SignOutButton = styled.button`
+ background: #b93bf6;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-size: 1.1rem;
+  margin-top: 3rem; 
+  cursor: pointer;
+  &:hover {
+    background:rgb(88, 20, 122);
+    transition: background 0.3s ease;   
+  }
+  `;
+
 const Dashboard = () => {
 
  const [username, setUsername] = useState(
@@ -124,8 +142,9 @@ const Dashboard = () => {
   const [password, setPassword] = useState(
     localStorage.getItem("igPassword") || ""
   );
+  const navigate = useNavigate();
 
-    const { isLoggedIn, coins, setCoins } = useAuth(); // directly use it
+    const { isLoggedIn, setIsLoggedIn, coins, setCoins } = useAuth(); // directly use it
 
   const [postUrl, setPostUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -211,7 +230,13 @@ const Dashboard = () => {
   };
 
 
-
+  const handleSignOut = async () => {
+    const success = await signOutUser();
+    if (success) {
+      setIsLoggedIn(false); 
+      navigate("/"); // back to home or login
+    }
+  };
 
 
     return (
@@ -332,8 +357,10 @@ const Dashboard = () => {
           <ClearHistory onClick={clearHistory}>
             Clear History
           </ClearHistory>
+       
         </>
       )}
+         <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
         </>
     )
 

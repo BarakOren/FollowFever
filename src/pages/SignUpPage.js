@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-  import { auth } from './firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";     // <-- add this
+import { auth, db } from "../firebase";               // <-- import Firestore DB
+
+
 
 const Container = styled.div`
   min-height: 100vh;
@@ -64,34 +67,51 @@ const LinkButton = styled.button`
     transition: color 0.3s ease; 
   }
 `;
-
 export default function SignUpPage() {
   const { setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");           // changed from username to email
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
+  
+        const handleSignUp = async (e) => {
+          e.preventDefault();
+          setError(null);
 
+          if (password !== confirmPassword) {
+            setError("Passwords do not match");
+            return;
+          }
 
-  const handleSignUp = (e) => {
-    e.preventDefault();
-    setError(null);
+          if (email.trim() && password.trim()) {
+            try {
+              const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+              const uid = userCredential.user.uid;
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+              // ✅ Firestore profile
+              await setDoc(doc(db, "users", uid), {
+                coins: 2,
+                email: email,
+                createdAt: new Date(),
+              });
 
-    if (username.trim() && password.trim()) {
-      setIsLoggedIn(true); // Fake login
-      navigate("/dashboard");
-    }
-  };
+              // ✅ Send verification email
+              await sendEmailVerification(userCredential.user);
 
+              // ✅ Inform the user
+              alert(
+                "Account created successfully! Please check your email and verify your account before logging in."
+              );
 
-
+              // Redirect them to a page telling them to verify
+              navigate("/verify-email"); // optional new page
+            } catch (err) {
+              setError(err.message);
+            }
+          }
+        };
 
   return (
     <Container>
@@ -99,10 +119,10 @@ export default function SignUpPage() {
         <Title>Sign Up</Title>
         <form onSubmit={handleSignUp}>
           <Input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <Input

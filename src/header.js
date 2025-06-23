@@ -61,7 +61,7 @@ const Coins = styled.p`
 
 const Header = () => {
   const { isLoggedIn, coins } = useAuth(); // directly use it
-
+  console.log(isLoggedIn)
 
   return (
     <HeaderContainer>
@@ -69,7 +69,10 @@ const Header = () => {
       <NavLinks>
         <NavLink to="pricing">Pricing</NavLink>
         <NavLink to="about">About</NavLink>
-        <DashboardButton to="dashboard">Dashboard</DashboardButton>
+        {isLoggedIn ? <DashboardButton to="dashboard">Dashboard</DashboardButton> :
+          <DashboardButton to="login">Login</DashboardButton>
+        }
+        
         <NavLink to="pricing" style={{color: coins < 5 ? 'red' : 'none'}}>{coins} 🪙</NavLink>
       </NavLinks>
     </HeaderContainer>

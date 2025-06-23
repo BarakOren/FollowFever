@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase"; // Adjust the import path as necessary
 
 const Container = styled.div`
   display: flex;
@@ -61,20 +63,36 @@ const LinkButton = styled.button`
   }
 `;
 
+
+const ErrorText = styled.p`
+  color: red;
+  margin: 0.5rem 0;
+`;
+
 export default function LoginPage() {
-  const { setIsLoggedIn } = useAuth();
-  const navigate = useNavigate();
+  const { auth } = useAuth();
+const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  console.log("Auth object:", auth);
+
+  // Using username state for username input, but you can change it to email if needed
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSignIn = (e) => {
+  const [error, setError] = useState(null);
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    if (username.trim() && password.trim()) {
-      setIsLoggedIn(true);
-      navigate("/dashboard");
+    setError(null);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("✅ Signed in:", userCredential.user); // success
+      navigate("/dashboard"); // ✅
+    } catch (err) {
+      setError(err.message);          // show error on UI
+      console.error("Sign-in failed:", err.code, err.message); // log full error
     }
   };
+
 
   return (
     <Container>
@@ -82,10 +100,10 @@ export default function LoginPage() {
         <Title>Sign In</Title>
         <form onSubmit={handleSignIn}>
           <Input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <Input
@@ -95,11 +113,18 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit" >Sign In</Button>
+
+          {error && <ErrorText>{error}</ErrorText>}
+
+          <Button type="submit">Sign In</Button>
         </form>
 
-        <LinkButton onClick={() => navigate("/forgot-password")}>Forgot Password?</LinkButton>
-        <LinkButton onClick={() => navigate("/signup")} style={{marginBottom: "10rem", fontSize: "1.5rem"}}>Sign Up</LinkButton>
+        <LinkButton onClick={() => navigate("/forgot-password")}>
+          Forgot password?
+        </LinkButton>
+        <LinkButton onClick={() => navigate("/signup")}>
+          Don’t have an account? Sign up
+        </LinkButton>
       </LoginBox>
     </Container>
   );

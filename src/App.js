@@ -10,7 +10,9 @@ import Pricing from "./pages/Pricing";
 import Footer from "./pages/components/Footer";
 import PaymentPage from "./pages/PaymentPage";
 import LoginPage from "./pages/LoginPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 import SignUpPage from "./pages/SignUpPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 // background-image: linear-gradient(to right bottom, #f8ffea, #fdf5de, #ffead8, #ffe0d7, #ffd7dc, #fad8e8, #f0daf3, #e3defa, #dce8ff, #daf1ff, #e0f9ff, #eafffe);
 
@@ -51,6 +53,8 @@ export default function App() {
         <Route path="/checkout" element={<PaymentPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage  />} />
      </Routes>
      <Footer />
     </AppContainer>
