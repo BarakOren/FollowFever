@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase"; // Adjust the import path as necessary
+import {auth} from "../firebase";
 
 const Container = styled.div`
   display: flex;
@@ -70,10 +70,8 @@ const ErrorText = styled.p`
 `;
 
 export default function LoginPage() {
-  const { auth } = useAuth();
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  console.log("Auth object:", auth);
 
   // Using username state for username input, but you can change it to email if needed
   const [email, setEmail] = useState("");

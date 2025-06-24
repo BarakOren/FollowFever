@@ -4,7 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import { signOutUser } from "../utils/signOutUser";
 import { useNavigate } from "react-router-dom";
 
-
+import { doc, updateDoc } from "firebase/firestore"; // ✅ import Firestore methods
+import { db } from "../firebase"; // ✅ import your Firestore instance
 
 const InputGroup = styled.div`
   display: flex;
@@ -144,8 +145,7 @@ const Dashboard = () => {
   );
   const navigate = useNavigate();
 
-    const { isLoggedIn, setIsLoggedIn, coins, setCoins } = useAuth(); // directly use it
-
+  const { isLoggedIn, setIsLoggedIn, userData, setUserData, currentUser } = useAuth(); // directly use it
   const [postUrl, setPostUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
@@ -170,8 +170,8 @@ const Dashboard = () => {
     e.preventDefault();
     setError(null);
     setResults(null);
-
-    if (coins <= 0) {
+    
+    if (userData.coins <= 0) {
       setError("You have no coins left. Please buy more.");
       return;
     }
@@ -203,7 +203,11 @@ const Dashboard = () => {
       const data = await res.json();
       setResults(data);
 
-      setCoins(prev => prev - 1);
+       const newCoins = userData.coins - 1;
+      await updateDoc(doc(db, "users", currentUser.uid), { coins: newCoins });
+
+      // ✅ Sync coins in context
+      setUserData((prev) => ({ ...prev, coins: newCoins }));
 
       const newEntry = {
         postUrl,

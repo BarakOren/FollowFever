@@ -60,9 +60,9 @@ const Coins = styled.p`
 
 
 const Header = () => {
-  const { isLoggedIn, coins } = useAuth(); // directly use it
-  console.log(isLoggedIn)
-
+  const { isLoggedIn, userData } = useAuth(); // directly use it
+  
+  
   return (
     <HeaderContainer>
       <Logo to="/">FollowFever🔥</Logo>
@@ -72,8 +72,9 @@ const Header = () => {
         {isLoggedIn ? <DashboardButton to="dashboard">Dashboard</DashboardButton> :
           <DashboardButton to="login">Login</DashboardButton>
         }
+        {isLoggedIn && <NavLink to="pricing" style={{color: userData.coins < 5 ? 'red' : 'none'}}>{userData.coins} 🪙</NavLink>}
         
-        <NavLink to="pricing" style={{color: coins < 5 ? 'red' : 'none'}}>{coins} 🪙</NavLink>
+        
       </NavLinks>
     </HeaderContainer>
   );
