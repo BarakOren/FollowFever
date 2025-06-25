@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import BuyCoins from "./BuyCoins";
+import { useAuth } from "../context/AuthContext";
 
 // Styled Components
 const Container = styled.div`
@@ -61,34 +62,34 @@ const BackLink = styled.a`
   text-decoration: underline;
 `;
 
+      // <Button onClick={handleProceed}>Proceed to PayPal</Button>
 
 const PaymentPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const{ purchaseAmount } = useAuth()
+  console.log(purchaseAmount)
 
-  // Parse coins and price from query params
-  const searchParams = new URLSearchParams(location.search);
-  const coins = searchParams.get("coins") || "50";
-  const price = coins === "100" ? "11.00" : coins === "50" ? "7.00" : "0.00";
 
   const handleProceed = () => {
     // Here you'll call your backend to create a PayPal payment session
-    alert(`Redirecting to PayPal for ${coins} coins ($${price})`);
+    alert(`Redirecting to PayPal for ${purchaseAmount.coins} coins ($${purchaseAmount.amount})`);
     // window.location.href = payPalUrl; <- after you implement the backend
   };
+
 
   return (
     <Container>
       <Title>Checkout</Title>
       <Summary>
         <SummaryItem>
-          <span>Coins:</span> <strong>{coins}</strong>
+          <span>Coins:</span> <strong>{purchaseAmount.coins}</strong>
         </SummaryItem>
         <SummaryItem>
-          <span>Price:</span> <strong>${price}</strong>
+          <span>Price:</span> <strong>${purchaseAmount.amount}</strong>
         </SummaryItem>
       </Summary>
-      <Button onClick={handleProceed}>Proceed to PayPal</Button>
+      <BuyCoins amount={purchaseAmount.amount} coins={purchaseAmount.coins} />
       <BackLink onClick={() => navigate("/pricing")}>← Back to Pricing</BackLink>
     </Container>
   );

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAuth } from "../context/AuthContext";
 import { signOutUser } from "../utils/signOutUser";
 import { useNavigate } from "react-router-dom";
-
+import { Spinner } from "../components/Spinner";
 import { doc, updateDoc } from "firebase/firestore"; // ✅ import Firestore methods
 import { db } from "../firebase"; // ✅ import your Firestore instance
 
@@ -135,6 +135,12 @@ const SignOutButton = styled.button`
   }
   `;
 
+
+const AboutCookies = styled.p`
+  font-size: 0.9rem;
+  color: red;
+  `;
+
 const Dashboard = () => {
 
  const [username, setUsername] = useState(
@@ -218,7 +224,8 @@ const Dashboard = () => {
       localStorage.setItem("scrapeHistory", JSON.stringify(updated));
       setHistory(updated);
     } catch (err) {
-      setError(err.message);
+      setError('Sorry, something went wrong. Please try again later.');
+      console.log(err.message)
     } finally {
       setLoading(false);
     }
@@ -267,6 +274,7 @@ const Dashboard = () => {
             />
           </label>
         </InputGroup>
+        <AboutCookies>FollowFever saves your account info with cookies only</AboutCookies>
         <InputGroup>
           <label style={{ flex: "1 1 100%" }}>
             Target Post URL
@@ -279,7 +287,7 @@ const Dashboard = () => {
           </label>
         </InputGroup>
           <SubmitButton type="submit" disabled={loading}>
-          {loading ? "Scraping..." : "Scrape"}
+          {loading ? <Spinner /> : "Scrape"}
         </SubmitButton>
       </form>
 
@@ -361,13 +369,15 @@ const Dashboard = () => {
           <ClearHistory onClick={clearHistory}>
             Clear History
           </ClearHistory>
+          <div>
+          <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+          </div>
        
         </>
       )}
-         <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
         </>
+        
     )
-
 }
 
 export default Dashboard;

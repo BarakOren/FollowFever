@@ -28,11 +28,12 @@ const Input = styled.input`
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   font-size: 1rem;
+  box-sizing: border-box;
 `;
 
 const Button = styled.button`
   width: 100%;
-padding: 0.75rem;
+  padding: 0.75rem;
  background: #b93bf6;
   color: white;
   border: none;
@@ -40,6 +41,7 @@ padding: 0.75rem;
   cursor: pointer;
   font-size: 1rem;
   margin-top: 0.5rem;
+
 
   &:hover {
        background:rgb(88, 20, 122);
@@ -78,18 +80,31 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const handleSignIn = async (e) => {
-    e.preventDefault();
-    setError(null);
+  e.preventDefault();
+  setError(null);
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("✅ Signed in:", userCredential.user); // success
-      navigate("/dashboard"); // ✅
-    } catch (err) {
-      setError(err.message);          // show error on UI
-      console.error("Sign-in failed:", err.code, err.message); // log full error
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    console.log("✅ Signed in:", userCredential.user); // success
+    navigate("/dashboard"); // ✅
+  } catch (err) {
+    // Default error message
+    let errorMessage = "An error occurred. Please try again.";
+
+    // Check for specific auth errors
+    if (err.code === "auth/invalid-credential") {
+      errorMessage = "Wrong email or password.";
+    } else if (err.code === "auth/user-not-found") {
+      errorMessage = "No user found with this email.";
+    } else if (err.code === "auth/wrong-password") {
+      errorMessage = "Wrong email or password.";
     }
-  };
+
+    setError(errorMessage); // Show the friendly error
+    console.error("Sign-in failed:", err.code, err.message); // debug log
+  }
+};
+
 
 
   return (
@@ -120,8 +135,8 @@ export default function LoginPage() {
         <LinkButton onClick={() => navigate("/forgot-password")}>
           Forgot password?
         </LinkButton>
-        <LinkButton onClick={() => navigate("/signup")}>
-          Don’t have an account? Sign up
+        <LinkButton onClick={() => navigate("/signup")} style={{fontSize: "1.1rem"}}>
+          Don’t have an account? <span style={{ fontWeight: "bold"}}>Sign up</span>
         </LinkButton>
       </LoginBox>
     </Container>

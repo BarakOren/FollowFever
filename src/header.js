@@ -67,8 +67,10 @@ const Header = () => {
     <HeaderContainer>
       <Logo to="/">FollowFever🔥</Logo>
       <NavLinks>
-        <NavLink to="pricing">Pricing</NavLink>
+        <NavLink to="guide">Guide</NavLink>
         <NavLink to="about">About</NavLink>
+        <NavLink to="pricing">Pricing</NavLink>
+
         {isLoggedIn ? <DashboardButton to="dashboard">Dashboard</DashboardButton> :
           <DashboardButton to="login">Login</DashboardButton>
         }

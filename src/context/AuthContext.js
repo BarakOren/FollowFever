@@ -1,5 +1,6 @@
+// AuthContext.js
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "../firebase"; // ✅ Make sure you import db
+import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -8,8 +9,9 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null); // ✅ profile data (coins etc.)
+  const [userData, setUserData] = useState(null); // <- profile data
   const [loading, setLoading] = useState(true);
+  const [purchaseAmount, setPurchaseAmount] = useState({amount: 0, coins: 0}); // <- purchase amount
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -18,33 +20,31 @@ export function AuthProvider({ children }) {
 
       if (user) {
         try {
-          // Fetch profile from Firestore
           const docRef = doc(db, "users", user.uid);
           const snap = await getDoc(docRef);
-          if (snap.exists()) {
-            setUserData(snap.data()); // e.g. { coins: 2, email: ..., createdAt: ... }
-          } else {
-            setUserData(null); // User has no profile doc
-          }
+          setUserData(snap.exists() ? snap.data() : null);
         } catch (error) {
           console.error("Error fetching user profile:", error);
           setUserData(null);
         }
       } else {
-        setUserData(null); // Logged-out, reset profile
+        setUserData(null);
       }
 
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
   const value = {
     currentUser,
     isLoggedIn,
     setIsLoggedIn,
-    userData, // ✅ new!
+    userData,
+    setUserData,
+    purchaseAmount,
+    setPurchaseAmount
   };
 
   return (
@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Hook for easy access
+// Easy hook
 export function useAuth() {
   return useContext(AuthContext);
 }

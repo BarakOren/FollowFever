@@ -9,7 +9,7 @@ import { auth, db } from "../firebase";               // <-- import Firestore DB
 
 
 const Container = styled.div`
-  min-height: 100vh;
+  min-height: 50vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -32,6 +32,7 @@ const Input = styled.input`
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   font-size: 1rem;
+    box-sizing: border-box;
 `;
 
 const Button = styled.button`
@@ -108,7 +109,7 @@ export default function SignUpPage() {
               // Redirect them to a page telling them to verify
               navigate("/verify-email"); // optional new page
             } catch (err) {
-              setError(err.message);
+              setError('something went wrong');
             }
           }
         };

@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import SignUpPage from "./pages/SignUpPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import GuidePage from "./pages/GuidePage";
 
 // background-image: linear-gradient(to right bottom, #f8ffea, #fdf5de, #ffead8, #ffe0d7, #ffd7dc, #fad8e8, #f0daf3, #e3defa, #dce8ff, #daf1ff, #e0f9ff, #eafffe);
 
@@ -22,6 +23,7 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     margin: 0;
     padding: 0;
+
   }
   /* other global styles */
 `;
@@ -30,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
 const AppContainer = styled.div`
   font-family: Arial, sans-serif;
   padding: 2rem;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   color: #222;
 `;
@@ -54,6 +56,7 @@ export default function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage  />} />
+        <Route path="/guide" element={<GuidePage  />} />
      </Routes>
      <Footer />
     </AppContainer>

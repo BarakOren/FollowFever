@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-  import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const PageWrapper = styled.div`
@@ -82,12 +82,13 @@ const Button = styled.button`
 
 const PricingPage = () => {
   const navigate = useNavigate();
-const { isLoggedIn } = useAuth();
+const { isLoggedIn,setPurchaseAmount} = useAuth();
 
    const handleBuy = (scrapeAmount) => {
     if (isLoggedIn) {
       // send to checkout page with the amount as a param or state
-      navigate("/checkout", { state: { scrapes: scrapeAmount } });
+      setPurchaseAmount({amount: scrapeAmount == 50 ? 7 : 11, coins: scrapeAmount})
+      navigate("/checkout");
     } else {
       // send them to login page
       navigate("/login");
@@ -105,10 +106,11 @@ const { isLoggedIn } = useAuth();
           <Price>$0</Price>
           <Coins>2 Coins per signup</Coins>
           <Features>
-            <li>2 free scrapes</li>
+            <li>2 free uses</li>
             <li>Upgrade anytime</li>
           </Features>
-          <Button disabled>Current</Button>
+          
+          {isLoggedIn ? <Button disabled>Free</Button> : <Button onClick={() => navigate("/signup")}>Sign up</Button>}
         </PlanCard>
 
         <PlanCard>
@@ -116,7 +118,7 @@ const { isLoggedIn } = useAuth();
           <Price>$7</Price>
           <Coins>50 Coins</Coins>
           <Features>
-            <li>50 scrapes</li>
+            <li>50 uses</li>
             <li>Valid forever</li>
           </Features>
           <Button onClick={() => handleBuy(50)}>Buy Now</Button>
@@ -127,7 +129,7 @@ const { isLoggedIn } = useAuth();
           <Price>$11</Price>
           <Coins>100 Coins</Coins>
           <Features>
-            <li>100 scrapes</li>
+            <li>100 uses</li>
             <li>Valid forever</li>
           </Features>
           <Button onClick={() => handleBuy(100)}>Buy Now</Button>

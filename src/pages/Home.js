@@ -26,7 +26,7 @@ const HeroSubtitle = styled.p`
   font-size: 1.2rem;
   color: #555;
   max-width: 600px;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 3rem auto;
 `;
 
 const CtaButton = styled.a`
@@ -36,7 +36,6 @@ const CtaButton = styled.a`
   border-radius: 1rem;
   text-decoration: none;
   font-size: 1.3rem;
-  margin: 100px 0;
   &:hover {
     background:rgb(88, 20, 122);
     transition: background 0.3s ease;   
@@ -103,6 +102,7 @@ const AboutText = styled.p`
 const PricingSection = styled.section`
   padding: 7rem 2rem;
   text-align: center;
+  
 `;
 
 const PricingTitle = styled.h2`
@@ -126,7 +126,13 @@ export default function HomePage() {
       <Hero>
         <HeroTitle>Find American Profiles Faster than ever - And watch your AI influencer getting $$$</HeroTitle>
         <HeroSubtitle>
-          Our scraper identifies American Instagram profiles for you in minutes, so you can target high-value clients without the manual work.
+          I never liked scrolling through hundreds of comments to find American profiles. It was energy & time consuming.
+          <br/>
+          <br/>
+          However, having American clients IS A MUST. they got big budgets, and they are ready to pay.
+          <br/>
+          <br/>
+          That's why I built FollowFever - now we can collect from one post all the american profile, and just follow\unfollow them quickly
         </HeroSubtitle>
         <CtaButton href="/dashboard">Start Scraping Now</CtaButton>
       </Hero>
@@ -160,10 +166,8 @@ export default function HomePage() {
       </Steps>
 
       <About>
-        <AboutTitle>Built for Agencies, Freelancers & Brands Who Want Results</AboutTitle>
-        <AboutText>
-          We simplify lead generation so you can focus on reaching your most valuable audience. Whether you’re a social media manager, small business owner, or influencer marketing team — we help you do more with less.
-        </AboutText>
+        <AboutTitle>Built to grow our client base faster than before.</AboutTitle>
+      
       </About>
 
       <FaqSection />
